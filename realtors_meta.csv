@@ -1,0 +1,27 @@
+realtor,element_price,element_address,element_parent,price_address_correspond,type,complex,config_url,config_loc,url
+Belle,.price,.suburb,,,lease,Y,Y,Manly,https://www.belleproperty.com/listings?propertyType=residential&sort=newold&searchStatus=rent&searchKeywords=Manly%20NSW%202095&search-keywords=Manly%20NSW%202095&state=all
+Bergelin,.listing-list-price,.listing-list-address,.l-table-cell,,lease,N,N,NA,https://www.bergelin.com.au/listings/?saleOrRental=Rental&order=priceMatch
+Cunninghams,.listing-card-prices,.listing-card-title,,,lease,N,Y,Manly,https://www.cunninghamsre.com.au/properties-for-rent/?suburbs=manlyvalensw2093
+Donovanre,p.value,.propertyTile-address,,,lease,N,N,NA,https://www.donovanre.com.au/renting/properties-for-lease/
+Etch,li,h1-style mb-0,,,lease,N,N,NA,https://www.etchrealestate.com.au/properties-for-lease/
+FirstNational,p,div,,,lease,N,Y,Manly,https://www.firstnationalmanly.com.au/renting/properties-for-lease/?property_type%5B%5D=Apartment&min_price=&max_price=&bedrooms=&bathrooms=&carspaces=
+Guildea,.propertyTile-pricetext,.propertyTile-address-streetaddress,,,lease,N,Y,Manly,https://guildea.switchre.com.au/properties-for-lease?radius=0&ac=&min=0&max=999999999&orderby=&beds=0&baths=0&cars=0&searchtype=2&page=&map=0&view=
+LJHooker,.track-link,.listings__item__address,,,lease,N,Y,Manly,https://seaforth.ljhooker.com.au/search/property-for-rent-in-manly-nsw-2095-au/page-1?sort=price&surrounding=true&liveability=False
+McGrath,.field-displayprice,.st-current,,,lease,N,Y,Manly,"https://www.mcgrath.com.au/search#listingresult_mq=Manly,%20NSW,%202095&listingresult_e=0&listingresult_g=1&listingresult_type=lease&listingresult_surroundingsuburbs=true"
+Novak,.listing-card-truncate,.listing-card-address listing-card-truncate,,,lease,N,Y,Manly,https://thenovakagency.com/listings/?post_type=listings&count=20&orderby=meta_value&meta_key=dateListed&sold=0&saleOrRental=Rental&paged=1&extended=0&order=priceMatch&type=residential&suburbs[]=MANLY&minprice=&maxprice=&minbeds=&maxbeds=&subcategory=&minbaths=&maxbaths=&arrive=&depart=&minSleeps=&maxSleeps=&cars=&externalID=&minlandarea=&maxlandarea=&landareaunit=&minbuildarea=&maxbuildarea=&buildareaunit=
+OneAgency,a,.font-size-small weight-medium listing-card-address listing-card-truncate,,,lease,N,Y,Manly,https://www.oneagencyforest.com.au/listings/?post_type=listings&count=20&orderby=meta_value&meta_key=dateListed&sold=0&saleOrRental=Rental&paged=1&order=dateListed-desc&doing_wp_cron=1654172631.6883289813995361328125&minprice=&maxprice=&minbeds=&maxbeds=&baths=&cars=&type=&externalID=&subcategory=&landsize=&suburbs[]=Freshwater&suburbs[]=Queenscliff
+PropertyNorth,span.price,.span,,,lease,Y,N,NA,https://www.propertynorthagency.com.au/
+PropertyProvider,.price,.wp-block-column lmpm-flex-basis-90,,,lease,N,N,NA,https://www.propertyproviders.com.au/long-term-properties/
+RaineAndHorne,.property_item__price,.property_item__address,,,lease,N,Y,Manly,https://www.raineandhorne.com.au/search/properties?utf8=%E2%9C%93&status=active&offer_type_code=rental&default_search=true&listing_type=residential&property_type=&min_bedrooms=&min_bathrooms=&min_car_spaces=&min_price=0&max_price=99999999&surrounding_suburbs=1&q=Manly
+RayWhite,.price,.card__title,,,lease,Y,Y,Manly,https://www.raywhite.com/listing?type=rent&address=Manly%2C+NSW+2095&location=130d0d10060e0d0d120f0b0f100c070f
+Recollective,div.cu-ppty-price-meta,.cu-ppty-address,,,lease,N,N,NA,https://recollective.com.au/for-rent/
+Red,p.price,div.listing-info__bottom,,,lease,N,N,NA,https://www.redproperty.com.au/lease/listings/
+RightSide,div.price,div.text,,,lease,N,N,NA,https://rightside.io/for-lease/
+Schwarz,.elementor-clearfix,".elementor-heading-title, .elementor-size-default",,,lease,N,N,NA,https://www.schwarzre.com.au/rent-well/
+SmytheAgents,.price,p.address,,,lease,N,Y,Manly,https://www.smythestateagents.com.au/leasing/on-the-market-for-lease/?keywords=2095&draft=1&price_min=&price_max=&bedrooms=&bathrooms=
+Stone,".default-price, .display-block",.address,,,lease,N,Y,Manly,https://www.stonerealestate.com.au/rent/residential-lease/?keywords=lease&keywords=MANLY%2C+NSW%2C+2095&property_type=&price_min=&price_max=&bedrooms=&bathrooms=&carspaces=
+Sweetnams,.price,h2.address,,,lease,N,Y,Manly,https://www.sweetnams.com.au/renting/?bedrooms=&price_min=&price_max=&keywords=2095
+TheAgency,.propertyTile-pricetext,.propertyTile-address-streetaddress,,,lease,N,Y,Manly,https://theagency.com.au/properties-for-lease?ac=suburb%3AManly%2C+NSW+2095&min=0&max=999999999&orderby=&searchtype=2&map=&view=&radius=2
+WhiteHouse,.listing-info,.listing-address,,,lease,N,Y,Manly,https://www.whitehouserealestate.com.au/lease/beautiful-houses-for-rent-northern-beaches-beyond/
+BondiRealty,.property-price,.property-address,,,lease,N,Y,Bondi,https://www.bondirealty.com.au/residential-rentals
+RandW,.text,.text,,,lease,N,Y,Bondi,https://bondi-beach.randw.com.au/property-for-lease.html

@@ -1,0 +1,152 @@
+---
+title: "*ClearingHaus*"
+output:
+  quarto::quarto_document:
+      mode: "website"
+knitr:
+  opts_chunk:
+    collapse: true
+---
+
+**Thesis:** [Domain.com.au](https://www.domain.com.au/) and [realestate.com.au](https://www.realestate.com.au) run a [collusive oligopoly](https://en.wikipedia.org/wiki/Oligopoly#Collusive_oligopolies) for online real estate listings, with [Domain](https://www.domain.com.au/) charging anywhere between \$700 to \$7,000 for a listing depending on marketing package tiers and property postcode. However, real estate agencies with smaller online market shares also exist. The online listings of these lower profile agencies are often of greater interest to prospective buyers or renters being often both: (i) cheaper (due to lower marketing costs), and; (ii) less competitive (due to less app/browser traffic).
+
+\
+**Report date**: `r Sys.Date()`\
+
+#  {.tabset .tabset-pills}
+
+## Technical {.tabset}
+
+```{r, echo=FALSE, warnings=FALSE, message=FALSE}
+pacman::p_load(rvest,
+               tidyverse,
+               openssl,
+               RSelenium,
+               crosstalk,
+               gmailr,
+               glue,
+               sendmailR,
+               tableHTML,
+               #taskscheduleR,
+               netstat,
+               stringr,
+               xml2,
+               seleniumPipes,
+               installr,
+               DT,
+               readr, 
+               quarto,
+               devtools)
+```
+
+```{r, echo=FALSE, warnings=FALSE, message=FALSE}
+#| echo: FALSE
+####################################
+###### browser
+####################################
+
+#rD <- rsDriver(browser="firefox", verbose=F, port=free_port(),check=T)
+
+remDr <- RSelenium::remoteDriver(remoteServerAddr = "localhost",
+                  port = 4445L, #4445L, #4445L,
+                  browserName = "firefox") #"chrome")
+remDr$open()
+#remDr$close()
+
+####################################
+###### realtor website scraping loop
+####################################
+source(paste0(here::here(),"/scraper_functions.R"))
+
+realtors <- read.csv(paste0(here::here(),"/realtors_meta.csv")) %>%
+  filter(complex == "N")
+
+####################### Manly
+overview_manly <- data.frame()
+for (i in 1:21) {
+
+  row <- realtors[i, ]
+
+  new_rows <- address_price(row$realtor,
+                            row$url,
+                            row$element_price,
+                            row$element_address)
+
+  if (any(!is.na(new_rows))) {
+
+    # new_row <- new_row %>% rename_with(~ c("price","count"), .cols = c(1,2)) %>%
+    #             mutate(!!paste0("realtor") := row$realtor) %>%
+    #             mutate_at("price", ~as.numeric(gsub('[$,]', '', .)))
+
+    overview_manly <- rbind(overview_manly, new_rows) |>
+                  na.omit()
+  }
+}
+
+####################### Bondi
+overview_bondi <- data.frame()
+for (i in 22:23) {
+
+  row <- realtors[i, ]
+
+  new_rows <- address_price(row$realtor,
+                            row$url,
+                            row$element_price,
+                            row$element_address)
+
+  if (any(!is.na(new_rows))) {
+
+    # new_row <- new_row %>% rename_with(~ c("price","count"), .cols = c(1,2)) %>%
+    #             mutate(!!paste0("realtor") := row$realtor) %>%
+    #             mutate_at("price", ~as.numeric(gsub('[$,]', '', .)))
+
+    overview_bondi <- rbind(overview_bondi, new_rows) |>
+                  na.omit()
+  }
+}
+remDr$close()
+```
+
+## Manly area {.active}
+
+```{r, echo=FALSE, message=FALSE, results='asis'}
+# overview <- read.csv(paste0(here::here(),"/overview_example.csv"),
+#                      row.names=NULL)
+DT::datatable(overview_manly,
+              options = list(
+    pageLength = 100,  # Set the default number of items per page to 100
+    order = list(list(2, 'asc'))
+  ))
+```
+
+## Bondi area {.tabset}
+
+```{r, echo=FALSE, message=FALSE, results='asis'}
+DT::datatable(overview_bondi,
+              options = list(
+    pageLength = 100,  # Set the default number of items per page to 100
+    order = list(list(2, 'asc'))
+  ))
+```
+
+##  {.unnumbered}
+
+**Disclaimer**
+
+*ClearingHaus* is a platform designed to facilitate the search for property listings and connect users with available rental or sale opportunities. While we strive to provide accurate and up-to-date information, we cannot guarantee the completeness, accuracy, or reliability of the listings and property details presented on this website.
+
+Users are encouraged to exercise due diligence and verify the information, including property availability, pricing, and terms, directly with the property owner, real estate agent, or relevant authority. We do not endorse, recommend, or guarantee any specific property, agent, or service listed on our platform.
+
+*ClearingHaus* is not involved in any real estate transactions and does not act as an agent, broker, or intermediary. We do not assume any responsibility or liability for the content of listings, the condition of properties, or the actions of users, property owners, or real estate professionals who use our platform.
+
+By using *ClearingHaus*, you agree that any transactions, interactions, or agreements made between you and third parties are solely your responsibility, and you should exercise caution and perform your own research before proceeding.
+
+We strongly advise users to seek legal or professional advice when dealing with property transactions and to comply with all applicable laws and regulations in their respective jurisdictions.
+
+*ClearingHaus* reserves the right to modify or remove listings, suspend or terminate user accounts, and make changes to the website without prior notice. Your use of this website is subject to our Terms of Service and Privacy Policy.
+
+Please report any inaccuracies or concerns about listings or user activity to our support team so that we can take appropriate action.
+
+By using *ClearingHaus*, you acknowledge and agree to the terms and conditions outlined in this disclaimer.
+
+##  {.unnumbered}
