@@ -1,0 +1,120 @@
+---
+output: 
+  output:
+  quarto::quarto_document:
+      mode: "website"
+knitr:
+  opts_chunk:
+    collapse: true
+---
+
+![](banner.png)
+
+##  {.tabset .tabset-pills}
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  echo=FALSE,
+  include=TRUE,
+  message=FALSE,
+  warning=FALSE,
+  error=TRUE,
+  results='asis'
+)
+```
+
+```{r}
+pacman::p_load(rvest,
+               tidyverse,
+               openssl,
+               RSelenium,
+               crosstalk,
+               gmailr,
+               glue,
+               sendmailR,
+               tableHTML,
+               #taskscheduleR,
+               netstat,
+               stringr,
+               xml2,
+               seleniumPipes,
+               installr,
+               DT,
+               readr,
+               pagedown,
+               htmltools,
+               rvest)
+```
+
+```{r, eval=FALSE}
+#rvest test params
+realtors <- read.csv(paste0(here::here(), "/realtors_meta.csv"))
+i=22
+row <- realtors[i, ]
+
+realtor <- row$realtor
+url <- row$url
+element_price<- row$element_price 
+element_address <- row$element_address
+```
+
+```{r}
+####################################
+###### realtor website scraping loop
+####################################
+source(paste0(here::here(),"/scraper_functions.R"))
+
+realtors <- read.csv(paste0(here::here(),"/realtors_meta.csv")) %>%
+  filter(complex == "N") %>%
+  filter(type == "buy")
+
+```
+
+**Buy or lease:** [`r unique(realtors$type)`]{style="color: red;"} <br> **Suburb:** [`r unique(realtors$config_loc)`]{style="color: red;"} <br> **Report date:** [ `r Sys.Date()` ]{style="color: red;"}
+
+```{r}
+####################### Manly
+# Initialize a list to store the results
+overview_manly_list <- list()
+
+# Loop over each row in realtors
+for (i in 1:nrow(realtors)) {
+  row <- realtors[i, ]
+  
+  # Call address_price_rvest function for the current row
+  result <- address_price_rvest(row$realtor,
+                                row$url,
+                                row$element_price,
+                                row$element_address)
+  
+  # Store the result in the list with a meaningful name
+  overview_manly_list[[paste0(row$realtor, "overview_manly_")]] <- result
+}
+
+overview_manly_df <- bind_rows(overview_manly_list)
+```
+
+### Manly {.active}
+
+```{r, echo=FALSE, message=FALSE, results='asis'}
+# overview <- read.csv(paste0(here::here(),"/overview_example.csv"),
+#                      row.names=NULL)
+DT::datatable(overview_manly_df,
+              options = list(
+    pageLength = 100,  # Set the default number of items per page to 100
+    order = list(list(2, 'asc'))
+  ))
+```
+
+### Missed realtors {.tabset}
+
+\
+Following realtors did not return listings for this report (consider checking websites directly):\
+
+```{r, eval=TRUE}
+realtors_full <- read.csv(paste0(here::here(),"/realtors_meta.csv")) 
+setdiff(realtors$realtor, overview_manly_df$realtor)
+```
+
+
+##  {.unnumbered}

@@ -2,8 +2,18 @@
 title: "About"
 ---
 
-About this site
+\*clearinghouse\* is a platform designed to facilitate the search for property listings and connect users with available rental or sale opportunities. While we strive to provide accurate and up-to-date information, we cannot guarantee the completeness, accuracy, or reliability of the listings and property details presented on this website.
 
-```{r}
-1 + 1
-```
+Users are encouraged to exercise due diligence and verify the information, including property availability, pricing, and terms, directly with the property owner, real estate agent, or relevant authority. We do not endorse, recommend, or guarantee any specific property, agent, or service listed on our platform.
+
+\*clearinghouse\* is not involved in any real estate transactions and does not act as an agent, broker, or intermediary. We do not assume any responsibility or liability for the content of listings, the condition of properties, or the actions of users, property owners, or real estate professionals who use our platform.
+
+By using \*clearinghouse\*, you agree that any transactions, interactions, or agreements made between you and third parties are solely your responsibility, and you should exercise caution and perform your own research before proceeding.
+
+We strongly advise users to seek legal or professional advice when dealing with property transactions and to comply with all applicable laws and regulations in their respective jurisdictions.
+
+\*clearinghouse\* reserves the right to modify or remove listings, suspend or terminate user accounts, and make changes to the website without prior notice. Your use of this website is subject to our Terms of Service and Privacy Policy.
+
+Please report any inaccuracies or concerns about listings or user activity to our support team so that we can take appropriate action.
+
+By using \*clearinghouse\*, you acknowledge and agree to the terms and conditions outlined in this disclaimer.

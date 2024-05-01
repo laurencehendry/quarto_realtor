@@ -1,0 +1,149 @@
+---
+output: 
+  html_document:
+    theme: flatly
+    highlight: kate
+    toc: false
+    toc_float:
+        collapsed: FALSE
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_file = paste0(
+        xfun::sans_ext(input), '-', format(Sys.time(), "%d-%b-%H-%M"), '.html'
+      ),
+      envir = globalenv()
+    )
+  })
+---
+
+![](banner.jpg)
+
+## {.tabset .tabset-pills}
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  echo=FALSE,
+  include=TRUE,
+  message=FALSE,
+  warning=FALSE,
+  error=TRUE,
+  results='asis'
+)
+```
+
+```{r}
+pacman::p_load(rvest,
+               tidyverse,
+               openssl,
+               RSelenium,
+               crosstalk,
+               gmailr,
+               glue,
+               sendmailR,
+               tableHTML,
+               #taskscheduleR,
+               netstat,
+               stringr,
+               xml2,
+               seleniumPipes,
+               installr,
+               DT,
+               readr,
+               pagedown,
+               htmltools,
+               rvest)
+```
+
+```{r, eval=FALSE}
+#rvest test params
+realtors <- read.csv(paste0(here::here(), "/realtors_meta.csv"))
+i=22
+row <- realtors[i, ]
+
+realtor <- row$realtor
+url <- row$url
+element_price<- row$element_price 
+element_address <- row$element_address
+```
+
+```{r}
+####################################
+###### realtor website scraping loop
+####################################
+source(paste0(here::here(),"/scraper_functions.R"))
+
+realtors <- read.csv(paste0(here::here(),"/realtors_meta.csv")) %>%
+  filter(complex == "N") %>%
+  filter(type == "buy")
+
+```
+
+**Buy or lease:** <span style="color: red;">`r unique(realtors$type)`</span> <br>
+**Suburb:** <span style="color: red;">`r unique(realtors$config_loc)`</span> <br>
+**Report date:** <span style="color: red;"> `r Sys.Date()` </span>
+
+
+```{r}
+####################### Manly
+# Initialize a list to store the results
+overview_manly_list <- list()
+
+# Loop over each row in realtors
+for (i in 1:nrow(realtors)) {
+  row <- realtors[i, ]
+  
+  # Call address_price_rvest function for the current row
+  result <- address_price_rvest(row$realtor,
+                                row$url,
+                                row$element_price,
+                                row$element_address)
+  
+  # Store the result in the list with a meaningful name
+  overview_manly_list[[paste0(row$realtor, "overview_manly_")]] <- result
+}
+
+overview_manly_df <- bind_rows(overview_manly_list)
+```
+
+### Manly {.active}
+
+```{r}
+# overview <- read.csv(paste0(here::here(),"/overview_example.csv"),
+#                      row.names=NULL)
+DT::datatable(overview_manly_df,
+              options = list(
+    pageLength = 100,  # Set the default number of items per page to 100
+    order = list(list(2, 'asc'))
+  ))
+```
+
+### Missed realtors {.tabset}
+
+\
+Following realtors did not return listings for this report (consider checking websites directly):\
+
+```{r, eval=TRUE}
+realtors_full <- read.csv(paste0(here::here(),"/realtors_meta.csv")) 
+setdiff(realtors$realtor, overview_manly_df$realtor)
+```
+
+### disclaimer {.tabset}
+
+*clearinghouse* is a platform designed to facilitate the search for property listings and connect users with available rental or sale opportunities. While we strive to provide accurate and up-to-date information, we cannot guarantee the completeness, accuracy, or reliability of the listings and property details presented on this website.
+
+Users are encouraged to exercise due diligence and verify the information, including property availability, pricing, and terms, directly with the property owner, real estate agent, or relevant authority. We do not endorse, recommend, or guarantee any specific property, agent, or service listed on our platform.
+
+*clearinghouse* is not involved in any real estate transactions and does not act as an agent, broker, or intermediary. We do not assume any responsibility or liability for the content of listings, the condition of properties, or the actions of users, property owners, or real estate professionals who use our platform.
+
+By using *clearinghouse*, you agree that any transactions, interactions, or agreements made between you and third parties are solely your responsibility, and you should exercise caution and perform your own research before proceeding.
+
+We strongly advise users to seek legal or professional advice when dealing with property transactions and to comply with all applicable laws and regulations in their respective jurisdictions.
+
+*clearinghouse* reserves the right to modify or remove listings, suspend or terminate user accounts, and make changes to the website without prior notice. Your use of this website is subject to our Terms of Service and Privacy Policy.
+
+Please report any inaccuracies or concerns about listings or user activity to our support team so that we can take appropriate action.
+
+By using *clearinghouse*, you acknowledge and agree to the terms and conditions outlined in this disclaimer.
+
+##  {.unnumbered}
