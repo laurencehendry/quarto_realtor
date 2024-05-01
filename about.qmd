@@ -2,6 +2,8 @@
 title: "About"
 ---
 
+**Thesis:** [Domain.com.au](https://www.domain.com.au/) and [realestate.com.au](https://www.realestate.com.au) run a [collusive oligopoly](https://en.wikipedia.org/wiki/Oligopoly#Collusive_oligopolies) for online real estate listings, with [Domain](https://www.domain.com.au/) charging anywhere between \$700 to \$7,000 for a listing depending on marketing package tiers and property postcode. However, real estate agencies with smaller online market shares also exist. The online listings of these lower profile agencies are often of greater interest to prospective buyers or renters being often both: (i) cheaper (due to lower marketing costs), and; (ii) less competitive (due to less app/browser traffic).
+
 \*clearinghouse\* is a platform designed to facilitate the search for property listings and connect users with available rental or sale opportunities. While we strive to provide accurate and up-to-date information, we cannot guarantee the completeness, accuracy, or reliability of the listings and property details presented on this website.
 
 Users are encouraged to exercise due diligence and verify the information, including property availability, pricing, and terms, directly with the property owner, real estate agent, or relevant authority. We do not endorse, recommend, or guarantee any specific property, agent, or service listed on our platform.

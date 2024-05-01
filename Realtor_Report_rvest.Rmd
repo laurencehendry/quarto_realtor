@@ -19,7 +19,7 @@ knit: (function(input, ...) {
 
 ![](banner.jpg)
 
-## {.tabset .tabset-pills}
+##  {.tabset .tabset-pills}
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -79,10 +79,7 @@ realtors <- read.csv(paste0(here::here(),"/realtors_meta.csv")) %>%
 
 ```
 
-**Buy or lease:** <span style="color: red;">`r unique(realtors$type)`</span> <br>
-**Suburb:** <span style="color: red;">`r unique(realtors$config_loc)`</span> <br>
-**Report date:** <span style="color: red;"> `r Sys.Date()` </span>
-
+**Buy or lease:** [`r unique(realtors$type)`]{style="color: red;"} <br> **Suburb:** [`r unique(realtors$config_loc)`]{style="color: red;"} <br> **Report date:** [ `r Sys.Date()` ]{style="color: red;"}
 
 ```{r}
 ####################### Manly
