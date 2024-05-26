@@ -6,7 +6,7 @@ Bergelin,.listing-list-price,.listing-list-address,,,buy,N,N,Manly,https://berge
 BondiRealty,.property-price,.property-address,,,lease,N,Y,Bondi,https://www.bondirealty.com.au/residential-rentals,Y
 Cunninghams,.listing-card-prices,.listing-card-title,,,lease,N,Y,Manly,https://www.cunninghamsre.com.au/properties-for-rent/?suburbs=manlyvalensw2093,Y
 Cunninghams,.listing-card-prices,.listing-card-title,,,buy,N,Y,Manly,https://www.cunninghamsre.com.au/properties-for-sale/?suburbs=manlynsw2095-brookvalensw2100-manlyvalensw2093,Y
-Donovanre,p.value,.propertyTile-address,,,lease,N,N,NA,https://www.donovanre.com.au/renting/properties-for-lease/,N
+Donovanre,p.value,.propertyTile-address,,,lease,N,N,NA,https://www.donovanre.com.au/search?q=manly,N
 Etch,li,h1-style mb-0,,,lease,N,N,NA,https://www.etchrealestate.com.au/properties-for-lease/,Y
 Etch,li,h1-style mb-0,,,buy,N,N,Manly,https://www.etchrealestate.com.au/properties-for-sale/,Y
 FirstNational,p,div,,,lease,N,Y,Manly,https://www.firstnationalmanly.com.au/renting/properties-for-lease/?property_type%5B%5D=Apartment&min_price=&max_price=&bedrooms=&bathrooms=&carspaces=,N

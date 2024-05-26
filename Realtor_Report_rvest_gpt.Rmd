@@ -1,0 +1,233 @@
+---
+output: 
+  html_document:
+    theme: flatly
+    highlight: kate
+    toc: false
+    toc_float:
+        collapsed: FALSE
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_file = paste0(
+        xfun::sans_ext(input), '-', format(Sys.time(), "%d-%b-%H-%M"), '.html'
+      ),
+      envir = globalenv()
+    )
+  })
+---
+
+![](banner.jpg)
+
+##  {.tabset .tabset-pills}
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  echo=FALSE,
+  include=TRUE,
+  message=FALSE,
+  warning=FALSE,
+  error=TRUE,
+  results='asis'
+)
+```
+
+```{r}
+pacman::p_load(pagedown,
+               htmltools,
+               tidyverse,
+               rvest,
+               xml2,
+               here,
+               httr,
+               DT,
+               readr,
+               stringr,
+               keyring)
+
+
+source(paste0(here::here(),"/scraper_functions.R"))
+
+#key_get("chatgpt")
+```
+
+```{r, eval=FALSE}
+#rvest test params
+# realtors <- read.csv(paste0(here::here(), "/realtors_meta.csv"))
+# i=22
+# row <- realtors[i, ]
+# 
+# realtor <- row$realtor
+# url <- row$url
+```
+
+```{r}
+# realtor website scraping loop
+realtors <- read.csv(paste0(here::here(),"/realtors_meta.csv")) %>%
+  filter(complex == "N") %>%
+  filter(type == "buy")
+
+```
+
+**Buy or lease:** [`r unique(realtors$type)`]{style="color: red;"} <br> **Suburb:** [`r unique(realtors$config_loc)`]{style="color: red;"} <br> **Report date:** [ `r Sys.Date()` ]{style="color: red;"}
+
+```{r}
+# Loop over each row in realtors
+for (i in 1:nrow(realtors)) {
+  row <- realtors[i, ]
+  result <- download_webpage(row$realtor,
+                             row$url)
+}
+```
+
+```{r}
+today_date <- format(Sys.Date(), "%Y-%m-%d")
+scrape_list <- list.files(paste0(here::here(), 
+                                 "/page_dumps/", 
+                                 today_date),
+                          full.names = TRUE)
+
+#i = scrape_list[1]
+
+#data_list <- list()
+
+all_combined_property_df <- data.frame()
+
+# Loop over each row in realtors
+# for (file_location in scrape_list) {
+#   
+#   #file_location = scrape_list[[i]]
+#   
+#   name <- sub("^.*/([^_]+)_.*", "\\1", file_location)
+#   
+#   prompt_precursor <- "Extract property information from the following content. Firstly you will scan the content and identify for each address the values for the following property metadata fields: address, price_information, bedroom_number, bathroom_number and carspace_number. In the event you cannot identify any of these metadata field values for a specific address then you are simply to return NA for a given metadata field. The price_information field should include whatever information is relevant for that address (for instance it may be that the property is indicated as for auction, in which case auction should be the returned value for price_information for this property) You must still include a placeholder for the given property metadata fields in your response even if it is NA. The final action you must take is to delimit your response. This final action means that each property in your response should be bracketed by curly brackets, and that the individual metadata fields will be delimited by semi-colons. For example: \\{address: 2 wakefield avenue, mosman, NSW 2088; price_information: $2,800,00; bedroom_number: 3; bathroom_number: 2; carspace_number: 1\\}\\{address: 5 kangaroo st, manly, NSW 2095; price_information: $1,800,00; bedroom_number: 4; bathroom_number: 1; carspace_number: NA\\}"
+#   
+#   response_one <- extract_information(file_location = file_location,
+#                                         prompt_precursor = prompt_precursor,
+#                                         name = name)
+#   
+#   response_two <- ask_chatgpt(paste0(prompt_precursor,":",response_one))
+#   
+#   properties <- str_split(response_two, "\\}\\{")[[1]]
+#   
+#   # Initialize an empty list to store property dataframes
+#   property_data_list <- list()
+#   
+#   # Iterate over each property
+#   for (property in properties) {
+#     # Parse the property using regex to create a dataframe
+#     property_df <- read.table(text = paste0("{", property, "}"), sep = ";", header = FALSE, col.names = c("address", "price_information", "bedroom_number", "bathroom_number", "carspace_number"))
+#     
+#     # Remove leading and trailing whitespace
+#     property_df <- lapply(property_df, trimws)
+#     
+#     # Append the realtor name to the dataframe
+#     property_df$realtor_name <- name
+#     
+#     # Append the dataframe to the property_data_list
+#     property_data_list[[length(property_data_list) + 1]] <- property_df
+#   }
+#   
+#   # Combine all dataframes in the property_data_list into a single dataframe
+#   combined_property_df <- bind_rows(property_data_list) %>%
+#                              mutate_all(~ gsub("^[^:]+: ", "", .))
+#   
+#   all_combined_property_df <- bind_rows(all_combined_property_df, combined_property_df)
+# 
+# }
+
+
+####################################
+
+
+
+for (file_location in scrape_list) {
+  tryCatch({
+    name <- sub("^.*/([^_]+)_.*", "\\1", file_location)
+
+    prompt_precursor <- "Extract property information from the following content. Firstly you will scan the content and identify for each address the values for the following property metadata fields: address, price_information, bedroom_number, bathroom_number and carspace_number. In the event you cannot identify any of these metadata field values for a specific address then you are simply to return NA for a given metadata field. The price_information field should include whatever information is relevant for that address (for instance it may be that the property is indicated as for auction, in which case auction should be the returned value for price_information for this property) You must still include a placeholder for the given property metadata fields in your response even if it is NA. The final action you must take is to delimit your response. This final action means that each property in your response should be bracketed by curly brackets, and that the individual metadata fields will be delimited by semi-colons. For example: \\{address: 2 wakefield avenue, mosman, NSW 2088; price_information: $2,800,00; bedroom_number: 3; bathroom_number: 2; carspace_number: 1\\}\\{address: 5 kangaroo st, manly, NSW 2095; price_information: $1,800,00; bedroom_number: 4; bathroom_number: 1; carspace_number: NA\\}"
+
+    response_one <- extract_information(file_location = file_location,
+                                        prompt_precursor = prompt_precursor,
+                                        name = name)
+
+    response_two <- ask_chatgpt(paste0(prompt_precursor, ":", response_one))
+
+    properties <- str_split(response_two, "\\}\\{")[[1]]
+
+    # Initialize an empty list to store property dataframes
+    property_data_list <- list()
+
+    # Iterate over each property
+    for (property in properties) {
+      # Parse the property using regex to create a dataframe
+      property_df <- read.table(text = paste0("{", property, "}"), sep = ";", header = FALSE, col.names = c("address", "price_information", "bedroom_number", "bathroom_number", "carspace_number"))
+
+      # Remove leading and trailing whitespace
+      property_df <- lapply(property_df, trimws)
+
+      # Append the realtor name to the dataframe
+      property_df$realtor_name <- name
+
+      # Append the dataframe to the property_data_list
+      property_data_list[[length(property_data_list) + 1]] <- property_df
+    }
+
+    # Combine all dataframes in the property_data_list into a single dataframe
+    combined_property_df <- bind_rows(property_data_list) %>%
+                               mutate_all(~ gsub("^[^:]+: ", "", .))
+
+    all_combined_property_df <- bind_rows(all_combined_property_df, combined_property_df)
+  }, error = function(e) {
+    # Print error message
+    cat("Error processing file:", file_location, "\n")
+    # Print error details
+    message(e)
+  })
+}
+
+
+#combined_df <- bind_rows(data_list)
+```
+
+### Manly {.active}
+
+```{r}
+# overview <- read.csv(paste0(here::here(),"/overview_example.csv"),
+#                      row.names=NULL)
+DT::datatable(overview_manly_df,
+              options = list(
+    pageLength = 100,  # Set the default number of items per page to 100
+    order = list(list(2, 'asc'))
+  ))
+```
+
+### Missed realtors {.tabset}
+
+\
+Following realtors did not return listings for this report (consider checking websites directly):\
+
+```{r, eval=TRUE}
+realtors_full <- read.csv(paste0(here::here(),"/realtors_meta.csv")) 
+setdiff(realtors$realtor, overview_manly_df$realtor)
+```
+
+### disclaimer {.tabset}
+
+*clearinghouse* is a platform designed to facilitate the search for property listings and connect users with available rental or sale opportunities. While we strive to provide accurate and up-to-date information, we cannot guarantee the completeness, accuracy, or reliability of the listings and property details presented on this website.
+
+Users are encouraged to exercise due diligence and verify the information, including property availability, pricing, and terms, directly with the property owner, real estate agent, or relevant authority. We do not endorse, recommend, or guarantee any specific property, agent, or service listed on our platform.
+
+*clearinghouse* is not involved in any real estate transactions and does not act as an agent, broker, or intermediary. We do not assume any responsibility or liability for the content of listings, the condition of properties, or the actions of users, property owners, or real estate professionals who use our platform.
+
+By using *clearinghouse*, you agree that any transactions, interactions, or agreements made between you and third parties are solely your responsibility, and you should exercise caution and perform your own research before proceeding.
+
+We strongly advise users to seek legal or professional advice when dealing with property transactions and to comply with all applicable laws and regulations in their respective jurisdictions.
+
+*clearinghouse* reserves the right to modify or remove listings, suspend or terminate user accounts, and make changes to the website without prior notice. Your use of this website is subject to our Terms of Service and Privacy Policy.
+
+Please report any inaccuracies or concerns about listings or user activity to our support team so that we can take appropriate action.
+
+By using *clearinghouse*, you acknowledge and agree to the terms and conditions outlined in this disclaimer.
+
+##  {.unnumbered}
